@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[RequireComponent(typeof(MapSettings))]
 public class BuildingMaker : InfrastructureBehaviour
 {
     public Material building;
+
+    private MapSettings set;
+
+    void Awake(){
+        set=this.gameObject.GetComponent<MapSettings>();
+    }
 
     IEnumerator Start()
     {
@@ -19,7 +25,12 @@ public class BuildingMaker : InfrastructureBehaviour
         {
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(way);
-            go.transform.position = localOrigin - map.bounds.Centre;
+            Vector3 TransformPos=localOrigin - map.bounds.Centre;
+
+            //magnitude horizontal 
+            TransformPos.x*=set.mag_h; TransformPos.z*=set.mag_h;
+
+            go.transform.position = TransformPos;
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
@@ -37,8 +48,18 @@ public class BuildingMaker : InfrastructureBehaviour
 
                 Vector3 v1 = new Vector3(p1.Longitude,0,p1.Latitude) - localOrigin;
                 Vector3 v2 = new Vector3(p2.Longitude,0,p2.Latitude) - localOrigin;
+
+                //magnitude horizontal  
+                v1.x*=set.mag_h; v1.z*=set.mag_h;
+                v2.x*=set.mag_h; v2.z*=set.mag_h;
+
                 Vector3 v3 = v1 + new Vector3(0, way.Height, 0);
                 Vector3 v4 = v2 + new Vector3(0, way.Height, 0);
+
+                //magnitude vertical 
+                v3.y*=set.mag_v; 
+                v4.y*=set.mag_v; 
+                
 
                 vectors.Add(v1);
                 vectors.Add(v2);

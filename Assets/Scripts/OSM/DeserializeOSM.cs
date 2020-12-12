@@ -5,7 +5,10 @@ using System.Xml;
 
 public class DeserializeOSM : MonoBehaviour
 {
-
+	/*
+	 * Don't use this!!
+	 * Of course this is one way!!
+	 */
 
     private XmlDocument doc = new XmlDocument();
 	private List<Transform> wayObjects = new List<Transform>();

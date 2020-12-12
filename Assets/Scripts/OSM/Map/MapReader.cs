@@ -10,8 +10,6 @@ public class MapReader : MonoBehaviour
      * Of course this is not MercatorProjection, but will  look atural in a small range. <= I want to use as a game service.
      */
 
-
-
     [HideInInspector]
     public Dictionary<ulong, OSMnode> nodes;
 

@@ -48,13 +48,13 @@ public class OSMway: OSM_Func
             string key = GetAttribute<string>("k", t.Attributes);
             if (key == "height")
             {
-                Height = 0.3048f * GetAttribute<float>("v", t.Attributes);
+                Height = GetAttribute<float>("v", t.Attributes);
             }
             
             else if (key == "building:levels")
             {
-                UnityEngine.Debug.Log(t.Attributes["v"].Value);
-                Height = 3.0f * GetAttribute<float>("v", t.Attributes);//If number is "全角"-japanese character, doesn't go well :(
+                //Debug.Log(t.Attributes["v"].Value);
+                Height = GetAttribute<float>("v", t.Attributes);//If number is "全角"-japanese character, doesn't go well :(
             }
 
             else if (key == "building")
@@ -73,7 +73,7 @@ public class OSMway: OSM_Func
             }
 
             else{//if not above, debug tag k(key)
-                Debug.Log(key+" is not expected");
+                //Debug.Log(key+" is not expected");
             }
 
         }

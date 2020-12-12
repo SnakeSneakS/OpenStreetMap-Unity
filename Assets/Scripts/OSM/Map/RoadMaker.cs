@@ -2,13 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
  
+
+[RequireComponent(typeof(MapSettings))]
 class RoadMaker : InfrastructureBehaviour
 {
     public Material roadMaterial;
+    
+    private MapSettings set;
+
+    void Awake(){
+        set=this.gameObject.GetComponent<MapSettings>();
+    }
 
     IEnumerator Start()
     {
-        
         while (!map.IsReady)
         {
             yield return null;
@@ -18,7 +25,7 @@ class RoadMaker : InfrastructureBehaviour
         {   
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(way);
-            go.transform.position = localOrigin - map.bounds.Centre;
+            go.transform.position = (localOrigin - map.bounds.Centre)*set.mag_h;//magnitude
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
@@ -38,8 +45,12 @@ class RoadMaker : InfrastructureBehaviour
                 Vector3 s1 = new Vector3(p1.Longitude,0,p1.Latitude) - localOrigin;
                 Vector3 s2 = new Vector3(p2.Longitude,0,p2.Latitude) - localOrigin;
                 
+                //magnitude horizontal map 
+                s1.x*=set.mag_h; s1.z*=set.mag_h;
+                s2.x*=set.mag_h; s2.z*=set.mag_h;
+                
                 Vector3 diff = (s2 - s1).normalized;
-                var cross = Vector3.Cross(diff, Vector3.up) * 2.0f; // 2 meters - width of lane
+                var cross = Vector3.Cross(diff, Vector3.up) * set.road_w; // 0.05 meters - width of lane
 
                 Vector3 v1 = s1 + cross;
                 Vector3 v2 = s1 - cross;
