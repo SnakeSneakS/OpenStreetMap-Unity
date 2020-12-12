@@ -443,7 +443,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1412397916}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf660869e30f14d72ba810f5803c6147, type: 3}
   m_Name: 
@@ -462,7 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0644cfd06b94c16bf46786f91a48ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OSMfileName: map.osm
+  OSMfileName: AroundWaseda.osm
 --- !u!1 &2137530246
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,7 +479,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2137530247
 Transform:
   m_ObjectHideFlags: 0
@@ -501,7 +501,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137530246}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 330989b8a91bf4bc69c9bba2f9d52473, type: 3}
   m_Name: 
@@ -510,4 +510,4 @@ MonoBehaviour:
   y: 0
   boundsX: 34
   boundsY: -118
-  mapName: map.osm
+  mapName: AroundWaseda.osm

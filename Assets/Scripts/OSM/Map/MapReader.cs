@@ -11,7 +11,7 @@ public class MapReader : MonoBehaviour
      */
 
 
-    //nodesとwaysに保存する。
+
     [HideInInspector]
     public Dictionary<ulong, OSMnode> nodes;
 
@@ -26,34 +26,32 @@ public class MapReader : MonoBehaviour
 
     public bool IsReady {get; private set; }
 
+
     // Start is called before the first frame update
     void Start()
     {
         nodes = new Dictionary<ulong, OSMnode>();
         ways = new List<OSMway>();
 
-        /*var txtAsset = Resources.Load<TextAsset>("Assets/OSM/Data/" + OSMfileName);
-        XmlDocument doc = new XmlDocument();
-        doc.LoadXml(txtAsset.text);*/
-
         XmlDocument doc = new XmlDocument();
         doc.Load(new XmlTextReader("Assets/OSM/Data/" + OSMfileName));
         SetBounds(doc.SelectSingleNode("/osm/bounds"));
         SetNodes(doc.SelectNodes("/osm/node"));
         SetWays(doc.SelectNodes("/osm/way"));
+        
 
         IsReady = true;
     /*}
 
     void Update()
-    {*/
+    {
         foreach ( OSMway w in ways)
         {
             if (w.Visible)
             {
-                /*
-                 * Draw Line Between Node in OMSWay
-                 */
+                
+                // Draw Line Between Node in OMSWay
+                
 
                 Color c = Color.cyan; // cyan for buildings
                 if (!w.IsBoundary) c = Color.red; // red for roads
@@ -72,11 +70,12 @@ public class MapReader : MonoBehaviour
                 }
 
             }
-        }
+        }*/
     }
 
     void SetWays(XmlNodeList xmlNodeList)
     {
+        Debug.Log("SetWays");
         foreach (XmlNode node in xmlNodeList)
         {
             OSMway way = new OSMway(node);
@@ -87,7 +86,8 @@ public class MapReader : MonoBehaviour
 
     void SetNodes(XmlNodeList xmlNodeList)
     {
-         foreach (XmlNode n in xmlNodeList)
+        Debug.Log("SetNodes");
+        foreach (XmlNode n in xmlNodeList)
         {
             OSMnode node = new OSMnode(n);
             nodes[node.ID] = node;
@@ -96,6 +96,7 @@ public class MapReader : MonoBehaviour
 
     void SetBounds(XmlNode xmlNode) 
     {
+        Debug.Log("SetBounds");
         bounds = new OSMbounds(xmlNode);
     }
 }

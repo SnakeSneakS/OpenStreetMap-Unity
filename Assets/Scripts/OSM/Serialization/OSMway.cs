@@ -3,7 +3,7 @@ using System;
 using System.Xml;
 using UnityEngine;
 
-public class OSMway
+public class OSMway: OSM_Func
 {
     public ulong ID {get; private set; }
     public bool Visible { get; private set; }
@@ -12,14 +12,6 @@ public class OSMway
     public bool IsBuilding {get; private set; }
     public bool IsRoad {get; private set; }
     public float Height {get; private set; }
-
-    //GetAttribute From OSM data
-    private T GetAttribute<T>(string attrName, XmlAttributeCollection attributes)
-    {
-        // TODO: We are going to assume 'attrName' exists in the collection
-        string strValue = attributes[attrName].Value;
-        return (T)Convert.ChangeType(strValue, typeof(T));
-    }
 
     public OSMway(XmlNode node)
     {
@@ -61,7 +53,8 @@ public class OSMway
             
             else if (key == "building:levels")
             {
-                 Height = 3.0f * GetAttribute<float>("v", t.Attributes);
+                UnityEngine.Debug.Log(t.Attributes["v"].Value);
+                Height = 3.0f * GetAttribute<float>("v", t.Attributes);//If number is "全角"-japanese character, doesn't go well :(
             }
 
             else if (key == "building")
@@ -80,10 +73,12 @@ public class OSMway
             }
 
             else{//if not above, debug tag k(key)
-                Debug.Log(key+"is not expected");
+                Debug.Log(key+" is not expected");
             }
 
         }
+
+        //Debug.Log(this.ID);
 
     }
    
