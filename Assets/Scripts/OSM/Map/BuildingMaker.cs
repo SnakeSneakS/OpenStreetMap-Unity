@@ -73,31 +73,43 @@ public class BuildingMaker : MonoBehaviour
                 
                 // index values
                 int idx1, idx2,idx3, idx4;
-                idx4 = vectors.Count - 1;
-                idx3 = vectors.Count - 2;
-                idx2 = vectors.Count - 3;
-                idx1 = vectors.Count - 4;
+                int count=vectors.Count;
+                idx4 = count - 1;
+                idx3 = count - 2;
+                idx2 = count - 3;
+                idx1 = count - 4;
 
-                // first triangle v1, v3, v2
-                indices.Add(idx1);
-                indices.Add(idx3);
-                indices.Add(idx2);
-
-                // second triangle v3, v4, v2
-                indices.Add(idx3);
-                indices.Add(idx4);
-                indices.Add(idx2);
-
-                // third triangle v2, v3, v1
-                indices.Add(idx2);
-                indices.Add(idx3);
-                indices.Add(idx1);
-
-                // fourth triangle v2, v4, v3
-                indices.Add(idx2);
-                indices.Add(idx4);
-                indices.Add(idx3);
+                
+                indices.Add(idx1); indices.Add(idx3); indices.Add(idx2); // first triangle v1, v3, v2 //one side
+                indices.Add(idx2); indices.Add(idx3); indices.Add(idx1); // second triangle v2, v3, v1 //the other side  
+                
+                indices.Add(idx3); indices.Add(idx4); indices.Add(idx2); // third triangle v3, v4, v2 //one side
+                indices.Add(idx2); indices.Add(idx4); indices.Add(idx3); // fourth triangle v2, v4, v3 //the other side
             }
+
+            //roof
+            if(way.IsBuilding){
+                int idx0=-1; //FirstRoofVector, one point of triangle
+                int idx1=-1; //one point of triangle - old Vector
+                int idx2=-1; //one point of triangle - new Vector
+                for(int i=0;i<vectors.Count;i++){
+                    if(vectors[i].y>0){ //Check if this is roof
+                        if(idx0==-1){ //first point of triangle (not change)
+                            idx0=i;
+                        }else{
+                            if(idx1==-1){ //if old vector is not assgined
+                                idx1=i;
+                            }else{ //both idx0 and idx1 is ready. Let's start to make triangle!
+                                idx2=i;
+                                indices.Add(idx1);indices.Add(idx0);indices.Add(idx2);//first triangle - one side
+                                indices.Add(idx2);indices.Add(idx0);indices.Add(idx1);//first triangle - the other side
+                                idx1=i;
+                            }
+                        }             
+                    }
+                }
+            }
+            
 
             mf.mesh.vertices = vectors.ToArray();
             mf.mesh.normals = normals.ToArray();

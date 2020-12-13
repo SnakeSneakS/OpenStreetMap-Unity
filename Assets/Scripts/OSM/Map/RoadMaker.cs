@@ -73,27 +73,28 @@ class RoadMaker : MonoBehaviour
                 
                 // index values
                 int idx1, idx2,idx3, idx4;
-                idx4 = vectors.Count - 1;
-                idx3 = vectors.Count - 2;
-                idx2 = vectors.Count - 3;
-                idx1 = vectors.Count - 4;
+                int count=vectors.Count;
+                idx4 = count - 1;
+                idx3 = count - 2;
+                idx2 = count - 3;
+                idx1 = count - 4;
 
-                // first triangle v1, v3, v2
+                // first triangle v1, v3, v2 //one side
                 indices.Add(idx1);
                 indices.Add(idx3);
                 indices.Add(idx2);
 
-                // second triangle v3, v4, v2
+                // second triangle v3, v4, v2 //one side
                 indices.Add(idx3);
                 indices.Add(idx4);
                 indices.Add(idx2);
 
-                // third triangle v2, v3, v1
+                // third triangle v2, v3, v1 //the other side
                 indices.Add(idx2);
                 indices.Add(idx3);
                 indices.Add(idx1);
 
-                // fourth triangle v2, v4, v3
+                // fourth triangle v2, v4, v3 //the other side
                 indices.Add(idx2);
                 indices.Add(idx4);
                 indices.Add(idx3);
