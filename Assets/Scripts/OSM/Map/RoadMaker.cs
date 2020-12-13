@@ -7,7 +7,7 @@ class RoadMaker : MonoBehaviour
 {
     public Material roadMaterial;
 
-    public IEnumerator Make(MapReader map, MapSettings set)
+    public IEnumerator Make(MapReader map, MapSettings set, GameObject parentObj)
     {
         if(map.mapData==null){
             Debug.Log("No Map Data");
@@ -24,6 +24,7 @@ class RoadMaker : MonoBehaviour
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(map,way);
             go.transform.position = (localOrigin - map.mapData.bounds.Centre)*set.mag_h;//magnitude
+            go.transform.parent=parentObj.transform;
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
@@ -119,7 +120,7 @@ class RoadMaker : MonoBehaviour
             lon+=map.mapData.nodes[id].Longitude;
         }
 
-        Vector3 total = new Vector3(lat,0,lon);
+        Vector3 total = new Vector3(lon,0,lat);
 
         return total / way.NodeIDs.Count;
     }

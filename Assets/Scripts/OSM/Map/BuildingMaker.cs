@@ -8,7 +8,7 @@ public class BuildingMaker : MonoBehaviour
     public Material building;
 
 
-    public IEnumerator Make(MapReader map, MapSettings set)
+    public IEnumerator Make(MapReader map, MapSettings set, GameObject parentObj)
     {
         if(map.mapData==null){
             Debug.Log("No Map Data");
@@ -25,6 +25,7 @@ public class BuildingMaker : MonoBehaviour
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(map,way);
             Vector3 TransformPos=localOrigin - map.mapData.bounds.Centre;
+            go.transform.parent=parentObj.transform;
 
             //magnitude horizontal 
             TransformPos.x*=set.mag_h; TransformPos.z*=set.mag_h;
@@ -117,7 +118,7 @@ public class BuildingMaker : MonoBehaviour
             lon+=map.mapData.nodes[id].Longitude;
         }
 
-        Vector3 total = new Vector3(lat,0,lon);
+        Vector3 total = new Vector3(lon,0,lat);
 
         return total / way.NodeIDs.Count;
     }

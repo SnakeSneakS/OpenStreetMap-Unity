@@ -21,6 +21,6 @@ public class OSMbounds: OSM_Func
         this.MaxLat = GetAttribute<float>("maxlat", node.Attributes);
         this.MinLon = GetAttribute<float>("minlon", node.Attributes);
         this.MaxLon = GetAttribute<float>("maxlon", node.Attributes); 
-        this.Centre=new Vector3((this.MaxLon-this.MinLon)*0.5f,0,(this.MaxLat-this.MinLat)*0.5f);
+        this.Centre=new Vector3((this.MaxLon+this.MinLon)*0.5f,0,(this.MaxLat+this.MinLat)*0.5f);
     }
 }
