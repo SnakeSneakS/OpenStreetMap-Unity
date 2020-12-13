@@ -2,30 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MapSettings))]
-public class BuildingMaker : InfrastructureBehaviour
+
+public class BuildingMaker : MonoBehaviour
 {
     public Material building;
 
-    private MapSettings set;
 
-    void Awake(){
-        set=this.gameObject.GetComponent<MapSettings>();
-    }
-
-    IEnumerator Start()
+    public IEnumerator Make(MapReader map, MapSettings set)
     {
+        if(map.mapData==null){
+            Debug.Log("No Map Data");
+            yield break;
+        }
         
-        while (!map.IsReady)
+        /*while (!map.IsReady)
         {
             yield return null;
-        }
+        }*/
 
-        foreach (var way in map.ways.FindAll((w) => { return w.IsBuilding && w.NodeIDs.Count > 1; }))
+        foreach (var way in map.mapData.ways.FindAll((w) => { return w.IsBuilding && w.NodeIDs.Count > 1; }))
         {
             GameObject go = new GameObject();
-            Vector3 localOrigin = GetCentre(way);
-            Vector3 TransformPos=localOrigin - map.bounds.Centre;
+            Vector3 localOrigin = GetCentre(map,way);
+            Vector3 TransformPos=localOrigin - map.mapData.bounds.Centre;
 
             //magnitude horizontal 
             TransformPos.x*=set.mag_h; TransformPos.z*=set.mag_h;
@@ -43,8 +42,8 @@ public class BuildingMaker : InfrastructureBehaviour
 
             for (int i = 1; i < way.NodeIDs.Count; i++)
             {
-                OSMnode p1 = map.nodes[way.NodeIDs[i - 1]];
-                OSMnode p2 = map.nodes[way.NodeIDs[i]];
+                OSMnode p1 = map.mapData.nodes[way.NodeIDs[i - 1]];
+                OSMnode p2 = map.mapData.nodes[way.NodeIDs[i]];
 
                 Vector3 v1 = new Vector3(p1.Longitude,0,p1.Latitude) - localOrigin;
                 Vector3 v2 = new Vector3(p2.Longitude,0,p2.Latitude) - localOrigin;
@@ -107,4 +106,20 @@ public class BuildingMaker : InfrastructureBehaviour
         }
 
     }
+
+    private Vector3 GetCentre(MapReader map ,OSMway way)
+    {
+        float lat=0.0f;
+        float lon=0.0f;
+        foreach (var id in way.NodeIDs)
+        {
+            lat+=map.mapData.nodes[id].Latitude;
+            lon+=map.mapData.nodes[id].Longitude;
+        }
+
+        Vector3 total = new Vector3(lat,0,lon);
+
+        return total / way.NodeIDs.Count;
+    }
+    
 }

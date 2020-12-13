@@ -399,9 +399,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1412397918}
   - component: {fileID: 1412397921}
-  - component: {fileID: 1412397920}
   - component: {fileID: 1412397919}
+  - component: {fileID: 1412397920}
   - component: {fileID: 1412397917}
+  - component: {fileID: 1412397922}
   m_Layer: 0
   m_Name: OSMmap
   m_TagString: Untagged
@@ -422,8 +423,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mag_h: 100
-  mag_v: 0.001
-  road_w: 0.001
+  mag_v: 0.003
+  road_w: 0.005
 --- !u!4 &1412397918
 Transform:
   m_ObjectHideFlags: 0
@@ -450,7 +451,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4fc95e78ff354878a9bc9bf4a9bf916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map: {fileID: 1412397921}
   roadMaterial: {fileID: 2100000, guid: d5471bc715af84744a49e1d3ea526106, type: 2}
 --- !u!114 &1412397920
 MonoBehaviour:
@@ -464,7 +464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf660869e30f14d72ba810f5803c6147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map: {fileID: 1412397921}
   building: {fileID: 2100000, guid: 06e9932f298ce47a4b4656d4c7853732, type: 2}
 --- !u!114 &1412397921
 MonoBehaviour:
@@ -476,6 +475,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f0644cfd06b94c16bf46786f91a48ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1412397922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412397916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9445b27beb7c1444591347b8c8662c6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OSMfileName: SmallAroundWaseda.osm
@@ -522,6 +533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330989b8a91bf4bc69c9bba2f9d52473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wayObjects: []
   x: 0
   y: 0
   boundsX: 34

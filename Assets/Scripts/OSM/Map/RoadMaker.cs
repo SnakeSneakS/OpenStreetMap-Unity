@@ -3,29 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
  
 
-[RequireComponent(typeof(MapSettings))]
-class RoadMaker : InfrastructureBehaviour
+class RoadMaker : MonoBehaviour
 {
     public Material roadMaterial;
-    
-    private MapSettings set;
 
-    void Awake(){
-        set=this.gameObject.GetComponent<MapSettings>();
-    }
-
-    IEnumerator Start()
+    public IEnumerator Make(MapReader map, MapSettings set)
     {
-        while (!map.IsReady)
-        {
-            yield return null;
+        if(map.mapData==null){
+            Debug.Log("No Map Data");
+            yield break;
         }
 
-        foreach (var way in map.ways.FindAll((w) => { return w.IsRoad; }))
+        /*while (!map.IsReady)
+        {
+            yield return null;
+        }*/
+
+        foreach (var way in map.mapData.ways.FindAll((w) => { return w.IsRoad; }))
         {   
             GameObject go = new GameObject();
-            Vector3 localOrigin = GetCentre(way);
-            go.transform.position = (localOrigin - map.bounds.Centre)*set.mag_h;//magnitude
+            Vector3 localOrigin = GetCentre(map,way);
+            go.transform.position = (localOrigin - map.mapData.bounds.Centre)*set.mag_h;//magnitude
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
@@ -39,8 +37,8 @@ class RoadMaker : InfrastructureBehaviour
 
             for (int i = 1; i < way.NodeIDs.Count; i++)
             {
-                OSMnode p1 = map.nodes[way.NodeIDs[i - 1]];
-                OSMnode p2 = map.nodes[way.NodeIDs[i]];
+                OSMnode p1 = map.mapData.nodes[way.NodeIDs[i - 1]];
+                OSMnode p2 = map.mapData.nodes[way.NodeIDs[i]];
 
                 Vector3 s1 = new Vector3(p1.Longitude,0,p1.Latitude) - localOrigin;
                 Vector3 s2 = new Vector3(p2.Longitude,0,p2.Latitude) - localOrigin;
@@ -108,6 +106,22 @@ class RoadMaker : InfrastructureBehaviour
             yield return null;
         }
 
+    }
+
+
+    private Vector3 GetCentre(MapReader map ,OSMway way)
+    {
+        float lat=0.0f;
+        float lon=0.0f;
+        foreach (var id in way.NodeIDs)
+        {
+            lat+=map.mapData.nodes[id].Latitude;
+            lon+=map.mapData.nodes[id].Longitude;
+        }
+
+        Vector3 total = new Vector3(lat,0,lon);
+
+        return total / way.NodeIDs.Count;
     }
          
 }

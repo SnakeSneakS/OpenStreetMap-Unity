@@ -4,97 +4,79 @@ using UnityEngine;
 
 public class MapReader : MonoBehaviour
 {
-    /*
-     * handle "latitude" as X
-     * handle "longitude" as Y
-     * Of course this is not MercatorProjection, but will  look atural in a small range. <= I want to use as a game service.
-     */
 
-    [HideInInspector]
+    /*[HideInInspector]
     public Dictionary<ulong, OSMnode> nodes;
 
     [HideInInspector]
     public List<OSMway> ways;
 
     [HideInInspector]
-    public OSMbounds bounds;
+    public OSMbounds bounds;*/
+
+    public class MapData{//OMS MAP DATA
+        public OSMbounds bounds{get;set;}
+        public Dictionary<ulong, OSMnode> nodes{get;set;}
+        public List<OSMway> ways{get;set;}
+    }
+
+    //this is a map data - 
+    public MapData mapData;
     
-    [SerializeField, TooltipAttribute("OSM map data (${MapName}.osm) located in Assets/OSM/Data folder")]
-    public string OSMfileName="MapName.osm";
-
-    public bool IsReady {get; private set; }
+    //this check if map data is ready 
+    //public bool IsReady {get; private set; } //comment out
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        nodes = new Dictionary<ulong, OSMnode>();
-        ways = new List<OSMway>();
 
+    public MapReader(string OSMfileName)//Constructor - perhaps heavy
+    {   
+        //MapData mapData=new MapData();
+        this.mapData=new MapData();
+        //Debug.Log("load file Assets/OSM/Data/"+OSMfileName);
         XmlDocument doc = new XmlDocument();
         doc.Load(new XmlTextReader("Assets/OSM/Data/" + OSMfileName));
-        SetBounds(doc.SelectSingleNode("/osm/bounds"));
-        SetNodes(doc.SelectNodes("/osm/node"));
-        SetWays(doc.SelectNodes("/osm/way"));
+        this.mapData.bounds = SetBounds(doc.SelectSingleNode("/osm/bounds"));
+        this.mapData.nodes = SetNodes(doc.SelectNodes("/osm/node"));
+        this.mapData.ways = SetWays(doc.SelectNodes("/osm/way"));
         
-
-        IsReady = true;
-    /*}
-
-    void Update()
-    {
-        foreach ( OSMway w in ways)
-        {
-            if (w.Visible)
-            {
-                
-                // Draw Line Between Node in OMSWay
-                
-
-                Color c = Color.cyan; // cyan for buildings
-                if (!w.IsBoundary) c = Color.red; // red for roads
-
-                for (int i =1; i < w.NodeIDs.Count; i++)
-                {
-                    OSMnode p1 = nodes[w.NodeIDs[i - 1 ]];
-                    OSMnode p2 = nodes[w.NodeIDs[i]];
-
-                    //Vector3 v1 = p1 - bounds.Centre;
-                    Vector3 v1=new Vector3(p1.Longitude,0,p1.Latitude);
-                    //Vector3 v2 = p2 - bounds.Centre;
-                    Vector3 v2=new Vector3(p2.Longitude,0,p2.Latitude);
-
-                    Debug.DrawLine(v1, v2, c);
-                }
-
-            }
-        }*/
+        //return mapData;
     }
 
-    void SetWays(XmlNodeList xmlNodeList)
+    OSMbounds SetBounds(XmlNode xmlNode) 
     {
-        Debug.Log("SetWays");
-        foreach (XmlNode node in xmlNodeList)
-        {
-            OSMway way = new OSMway(node);
-            ways.Add(way);
-        }
-
+        //Debug.Log("SetBounds");
+        OSMbounds bound;
+        bound=new OSMbounds(xmlNode);
+        return bound;
     }
 
-    void SetNodes(XmlNodeList xmlNodeList)
+    Dictionary<ulong, OSMnode> SetNodes(XmlNodeList xmlNodeList)
     {
-        Debug.Log("SetNodes");
+        //Debug.Log("SetNodes");
+        Dictionary<ulong, OSMnode> nodes=new Dictionary<ulong, OSMnode>();
         foreach (XmlNode n in xmlNodeList)
         {
             OSMnode node = new OSMnode(n);
             nodes[node.ID] = node;
         }
+        return nodes;
     }
 
-    void SetBounds(XmlNode xmlNode) 
+    List<OSMway> SetWays(XmlNodeList xmlNodeList)
     {
-        Debug.Log("SetBounds");
-        bounds = new OSMbounds(xmlNode);
+        //Debug.Log("SetWays");
+        List<OSMway> ways=new List<OSMway>();
+
+        foreach (XmlNode node in xmlNodeList)
+        {
+            OSMway way = new OSMway(node);
+            ways.Add(way);
+        }
+        return ways;
+
     }
+
+    
+
+    
 }
