@@ -493,4 +493,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9445b27beb7c1444591347b8c8662c6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OSMfileName: SmallAroundWaseda.osm
+  OSMfileName: MapName.osm
