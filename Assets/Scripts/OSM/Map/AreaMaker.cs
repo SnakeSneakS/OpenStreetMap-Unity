@@ -28,6 +28,14 @@ public class AreaMaker : MonoBehaviour
     LeisureClassification leisureClassification=new LeisureClassification();
 
 
+    class AreaHeight{
+        public float Highest=0.1f;
+        public float Middle=0.0f;
+        public float Lowest=-0.1f;
+    }
+    AreaHeight areaHeight = new AreaHeight();
+
+
     public IEnumerator Make(MapReader map, MapSettings set, GameObject parentObj, Vector3 areaPos)
     {
         if(map.mapData==null){
@@ -39,7 +47,7 @@ public class AreaMaker : MonoBehaviour
         areaObj.transform.parent=parentObj.transform;
         areaObj.name="Areas";
 
-        foreach (var way in map.mapData.ways.FindAll((w) => { return w.Leisure!=null && w.NodeIDs.Count > 1; }))
+        foreach (var way in map.mapData.ways.FindAll((w) => { return w.Leisure!=null && w.NodeIDs.Count > 1 && !w.IsBuilding; }))
         {
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(map,way);
@@ -50,31 +58,39 @@ public class AreaMaker : MonoBehaviour
             //magnitude horizontal 
             TransformPos.x*=set.mag_h; TransformPos.z*=set.mag_h;
 
-            go.transform.position = TransformPos;
+            
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
 
 
-            //classfy highway and assgin each material
+            //classfy highway and assgin each material,  and ajust height
             if(leisureClassification.LookSandValues.Contains(way.Leisure)){
                 mr.material = leisureMaterial.SandMaterial;
+                TransformPos.y=areaHeight.Middle;
             }else if(leisureClassification.LookWaterValues.Contains(way.Leisure)){
                 mr.material = leisureMaterial.WaterMaterial;
+                TransformPos.y=areaHeight.Highest;
             }else if(leisureClassification.LookGrassValues.Contains(way.Leisure)){
                 mr.material = leisureMaterial.GrassMaterial;
+                TransformPos.y=areaHeight.Lowest;
             }else{
                 mr.material = leisureMaterial.ElseMaterial;
+                TransformPos.y=areaHeight.Middle;
             }
+
+            go.transform.position = TransformPos;
+
 
             List<Vector3> vectors = new List<Vector3>();
             List<Vector3> normals = new List<Vector3>();
             List<int> indices = new List<int>();
+            List<Vector2> uvs = new List<Vector2>();
 
             OSMnode p0 = map.mapData.nodes[way.NodeIDs[0]];//first point of all triangle
             Vector3 v0 = new Vector3(p0.Longitude,0,p0.Latitude) - localOrigin;
             v0.x*=set.mag_h; v0.z*=set.mag_h;
-            vectors.Add(v0); normals.Add(-Vector3.forward);
+            vectors.Add(v0); normals.Add(-Vector3.forward); uvs.Add(new Vector2(1,0));
             int idx0=0;
             for (int i = 2; i < way.NodeIDs.Count; i++)
             {
@@ -101,17 +117,26 @@ public class AreaMaker : MonoBehaviour
                 
                 indices.Add(idx0); indices.Add(idx1); indices.Add(idx2); // first triangle v1, v3, v2 //one side
                 indices.Add(idx2); indices.Add(idx1); indices.Add(idx0); // second triangle v2, v3, v1 //the other side  
+
+                uvs.Add(new Vector2(v1.x-v0.x, v1.z-v0.z)/8); uvs.Add(new Vector2(v2.x-v0.x, v2.z-v0.z)/8);
                 
             }            
 
             mf.mesh.vertices = vectors.ToArray();
             mf.mesh.normals = normals.ToArray();
             mf.mesh.triangles = indices.ToArray();
+            mf.mesh.uv = uvs.ToArray();
+
+            //cast shadow off
+            mr.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
+            go.isStatic=true;
 
             yield return null;
         }
 
         areaObj.transform.position=areaPos;
+
+        
 
     }
 

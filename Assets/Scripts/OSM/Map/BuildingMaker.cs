@@ -40,6 +40,7 @@ public class BuildingMaker : MonoBehaviour
             List<Vector3> vectors = new List<Vector3>();
             List<Vector3> normals = new List<Vector3>();
             List<int> indices = new List<int>();
+            List<Vector2> uvs = new List<Vector2>();
 
             for (int i = 1; i < way.NodeIDs.Count; i++)
             {
@@ -70,6 +71,18 @@ public class BuildingMaker : MonoBehaviour
                 normals.Add(-Vector3.forward);
                 normals.Add(-Vector3.forward);
                 normals.Add(-Vector3.forward);
+                
+                
+                uvs.Add(new Vector3(0,0));
+                uvs.Add(new Vector3(1,0));
+                uvs.Add(new Vector3(0,1));
+                uvs.Add(new Vector3(1,1));
+                       
+
+                    
+
+                
+                
                 
                 // index values
                 int idx1, idx2,idx3, idx4;
@@ -114,6 +127,11 @@ public class BuildingMaker : MonoBehaviour
             mf.mesh.vertices = vectors.ToArray();
             mf.mesh.normals = normals.ToArray();
             mf.mesh.triangles = indices.ToArray();
+            mf.mesh.uv = uvs.ToArray();
+            
+            //cast shadow off
+            mr.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
+            go.isStatic=true;
 
             yield return null;
         }

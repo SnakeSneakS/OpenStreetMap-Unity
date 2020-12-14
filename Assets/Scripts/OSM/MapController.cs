@@ -33,7 +33,7 @@ public class MapController : MonoBehaviour
     void Start()
     {   
         //By this function, Create 3D map from Assets/Data/OSM/${OMSFileName}  
-        GenerateMapFromOSM(OSMfileName,new Vector3(0,0,0));
+        GenerateMapFromOSM(OSMfileName,new Vector3(0,1,0));
     }
 
     private void GenerateMapFromOSM(string OSMfileName,Vector3 MapPos){//MapPos will be effective especially when you use multiple maps
@@ -46,8 +46,8 @@ public class MapController : MonoBehaviour
         GameObject obj=new GameObject();
         obj.name="MAP-GROUP";
         obj.transform.position=MapPos;
-        StartCoroutine(buildingMaker.Make(map,set,obj,Vector3.up*4));
-        StartCoroutine(roadMaker.Make(map,set,obj,Vector3.up*2));
+        StartCoroutine(buildingMaker.Make(map,set,obj,Vector3.up*0.2f));
+        StartCoroutine(roadMaker.Make(map,set,obj,Vector3.up*0.1f));
         StartCoroutine(areaMaker.Make(map,set,obj,Vector3.zero));
         
         //ShowMapData

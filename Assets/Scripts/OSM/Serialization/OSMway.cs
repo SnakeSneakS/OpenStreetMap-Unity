@@ -58,10 +58,10 @@ public class OSMway: OSM_Func
             {
                 Height = GetAttribute<float>("v", t.Attributes);
             }
-            
             else if (key == "building:levels")
             {
                 //Debug.Log(t.Attributes["v"].Value);
+                IsBuilding = true;
                 Height = GetAttribute<float>("v", t.Attributes);//If number is "全角"-japanese character, doesn't go well :(
             }
             else if (key == "building")

@@ -201,6 +201,10 @@ class RoadMaker : MonoBehaviour
             mf.mesh.triangles = indices.ToArray();
             mf.mesh.uv = uvs.ToArray();
 
+            //cast shadow off
+            mr.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
+            go.isStatic=true;
+
             yield return null;
         }
 
