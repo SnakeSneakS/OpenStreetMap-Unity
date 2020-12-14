@@ -43,7 +43,7 @@ class RoadMaker : MonoBehaviour
         roadObj.transform.parent=parentObj.transform;
         roadObj.name="Roads";
 
-        foreach (var way in map.mapData.ways.FindAll((w) => { return w.Highway != ""; }))//foreach in way where way.Highway!="", This means some kind of Highway
+        foreach (var way in map.mapData.ways.FindAll((w) => { return w.Highway != null; }))//foreach in way where way.Highway!="", This means some kind of Highway
         {   
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(map,way);
