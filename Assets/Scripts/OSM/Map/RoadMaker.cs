@@ -32,24 +32,24 @@ class RoadMaker : MonoBehaviour
    
 
 
-    public IEnumerator Make(MapReader map, MapSettings set, GameObject parentObj)
+    public IEnumerator Make(MapReader map, MapSettings set, GameObject parentObj,Vector3 roadPos)
     {
         if(map.mapData==null){
             Debug.Log("No Map Data");
             yield break;
         }
 
-        /*while (!map.IsReady)
-        {
-            yield return null;
-        }*/
+        GameObject roadObj = new GameObject();
+        roadObj.transform.parent=parentObj.transform;
+        roadObj.transform.position=roadPos;
+        roadObj.name="Roads";
 
         foreach (var way in map.mapData.ways.FindAll((w) => { return w.Highway != ""; }))//foreach in way where way.Highway!="", This means some kind of Highway
         {   
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(map,way);
             go.transform.position = (localOrigin - map.mapData.bounds.Centre)*set.mag_h;//magnitude
-            go.transform.parent=parentObj.transform;
+            go.transform.parent=roadObj.transform;
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             MeshRenderer mr = go.AddComponent<MeshRenderer>();

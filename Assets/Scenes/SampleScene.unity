@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 1412397920}
   - component: {fileID: 1412397917}
   - component: {fileID: 1412397922}
+  - component: {fileID: 1412397923}
   m_Layer: 0
   m_Name: OSMmap
   m_TagString: Untagged
@@ -493,4 +494,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9445b27beb7c1444591347b8c8662c6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OSMfileName: MapName.osm
+  OSMfileName: SmallAroundWaseda.osm
+--- !u!114 &1412397923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412397916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f054865a5394e09adabb6b27f99e3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leisureMaterial:
+    SandMaterial: {fileID: 2100000, guid: 5234dab56579f4e19a77e18ff04a3df3, type: 2}
+    WaterMaterial: {fileID: 2100000, guid: 087887a59ff1743ffa98c01950cbe608, type: 2}
+    GrassMaterial: {fileID: 2100000, guid: e025f4abaebd441988313a5690836497, type: 2}
+    ElseMaterial: {fileID: 2100000, guid: b17fdf6d3e056446886616aabdf25762, type: 2}

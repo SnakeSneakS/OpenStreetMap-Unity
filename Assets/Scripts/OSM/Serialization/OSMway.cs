@@ -12,6 +12,9 @@ public class OSMway: OSM_Func
     public bool IsBuilding {get; private set; }
     public string Highway {get; private set; }
     public float Height {get; private set; }
+    public string Leisure{get;private set;}
+    public string Nature{get;private set;}
+
 
     public OSMway(XmlNode node)
     {
@@ -64,7 +67,10 @@ public class OSMway: OSM_Func
             {
                 Highway = GetAttribute<string>("v", t.Attributes);;
             }
-
+            else if (key == "leisure")
+            {
+                Leisure = GetAttribute<string>("v", t.Attributes);;
+            }
             else{//if not above, debug tag k(key)
                 //Debug.Log(key+" is not expected");
             }

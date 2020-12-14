@@ -12,6 +12,7 @@ public class MapController : MonoBehaviour
      */
     BuildingMaker buildingMaker;
     RoadMaker roadMaker;
+    AreaMaker areaMaker;
 
 
     MapSettings set;
@@ -25,6 +26,7 @@ public class MapController : MonoBehaviour
     void Awake(){
         buildingMaker=GetComponent<BuildingMaker>();
         roadMaker=GetComponent<RoadMaker>();
+        areaMaker=GetComponent<AreaMaker>();
         set=GetComponent<MapSettings>();
     }
 
@@ -40,12 +42,13 @@ public class MapController : MonoBehaviour
         MapReader map=new MapReader(OSMfileName); //map data is in mapReader.mapData
         Debug.Log("map " + OSMfileName + " loaded");
 
-        //Debug.Log("Make Buildings and Roads");
+
         GameObject obj=new GameObject();
         obj.name="MAP-GROUP";
         obj.transform.position=MapPos;
-        StartCoroutine(buildingMaker.Make(map,set,obj));
-        StartCoroutine(roadMaker.Make(map,set,obj));
+        StartCoroutine(buildingMaker.Make(map,set,obj,Vector3.up*4));
+        StartCoroutine(roadMaker.Make(map,set,obj,Vector3.up*2));
+        StartCoroutine(areaMaker.Make(map,set,obj,Vector3.zero));
         
         //ShowMapData
         //Debug.Log("\nLongitude: " + map.mapData.bounds.MinLon + " ~ " + map.mapData.bounds.MaxLon + " , Latitude: " + map.mapData.bounds.MinLat + " ~ " + map.mapData.bounds.MaxLat);
