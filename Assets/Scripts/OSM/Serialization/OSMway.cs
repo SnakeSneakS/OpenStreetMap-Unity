@@ -56,17 +56,10 @@ public class OSMway: OSM_Func
                 //Debug.Log(t.Attributes["v"].Value);
                 Height = GetAttribute<float>("v", t.Attributes);//If number is "全角"-japanese character, doesn't go well :(
             }
-
             else if (key == "building")
             {
                 IsBuilding = GetAttribute<string>("v", t.Attributes) == "yes";
             }
-
-            else if (key == "building")
-            {
-                Height = 10.0f;
-            }
-
             else if (key == "highway")
             {
                 IsRoad = true;

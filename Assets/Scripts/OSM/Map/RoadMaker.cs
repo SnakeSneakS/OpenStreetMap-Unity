@@ -135,7 +135,7 @@ class RoadMaker : MonoBehaviour
                 indices.Add(idx3); indices.Add(idx2); indices.Add(idx4); // fourth triangle v2, v4, v3 //the other side*/
                 
                 if(i==wayCount-1){//if last: add last triangle v1, v2, v3, v4
-                    /*vectors.Add(v1_old); vectors.Add(v2_old);*/ vectors.Add(v1); vectors.Add(v2);
+                    /*vectors.Add(v1_old); vectors.Add(v2_old);*/ vectors.Add(v3); vectors.Add(v4);
 
                     uvs.Add(new Vector2(0,1)); uvs.Add(new Vector2(1,1)); /*uvs.Add(new Vector3(0,1)); uvs.Add(new Vector3(1,1));*/
 
