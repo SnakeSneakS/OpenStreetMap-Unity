@@ -10,7 +10,7 @@ public class OSMway: OSM_Func
     public List<ulong> NodeIDs {get; private set; }//nd in way: it's "id"
     public bool IsBoundary {get; private set; }
     public bool IsBuilding {get; private set; }
-    public bool IsRoad {get; private set; }
+    public string Highway {get; private set; }
     public float Height {get; private set; }
 
     public OSMway(XmlNode node)
@@ -62,7 +62,7 @@ public class OSMway: OSM_Func
             }
             else if (key == "highway")
             {
-                IsRoad = true;
+                Highway = GetAttribute<string>("v", t.Attributes);;
             }
 
             else{//if not above, debug tag k(key)

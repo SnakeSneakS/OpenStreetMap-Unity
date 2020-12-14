@@ -424,7 +424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mag_h: 100000
   mag_v: 1
-  road_w: 5
+  road_w: 2
 --- !u!4 &1412397918
 Transform:
   m_ObjectHideFlags: 0
@@ -451,7 +451,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4fc95e78ff354878a9bc9bf4a9bf916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roadMaterial: {fileID: 2100000, guid: d5471bc715af84744a49e1d3ea526106, type: 2}
+  roadMaterial:
+    MainHighway: {fileID: 2100000, guid: d5471bc715af84744a49e1d3ea526106, type: 2}
+    SubHighway: {fileID: 2100000, guid: 3f04c41a0393b4d45b0f5e17da6251b3, type: 2}
+    PathHighway: {fileID: 2100000, guid: 560b882408eeb4105a44478f859eefbd, type: 2}
+    ElseHighway: {fileID: 2100000, guid: bb62c049511684f398269a9f7ba7f4e1, type: 2}
 --- !u!114 &1412397920
 MonoBehaviour:
   m_ObjectHideFlags: 0

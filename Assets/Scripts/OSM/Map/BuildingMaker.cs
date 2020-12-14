@@ -88,7 +88,7 @@ public class BuildingMaker : MonoBehaviour
             }
 
             //roof
-            if(way.IsBuilding){
+            if(/*way.IsBuilding*/true){
                 int idx0=-1; //FirstRoofVector, one point of triangle
                 int idx1=-1; //one point of triangle - old Vector
                 int idx2=-1; //one point of triangle - new Vector

@@ -5,7 +5,32 @@ using UnityEngine;
 
 class RoadMaker : MonoBehaviour
 {
-    public Material roadMaterial;
+    [System.SerializableAttribute]
+    public class RoadMaterial{
+        public Material MainHighway;
+        public Material SubHighway;
+        public Material PathHighway;
+        public Material ElseHighway;
+    }
+
+    [SerializeField]
+    public RoadMaterial roadMaterial=new RoadMaterial();
+    
+
+    /*
+     * https://wiki.openstreetmap.org/wiki/Key:highway 
+     * already   way: highway
+     * remaining way: footway, sidewalk, cycleway, etc.
+     */
+    class RoadClassification{
+        public List<string> MainHighwayValues = new List<string>(){"motorway","trunk","primary","secondary","tertiary","unclassified","residential","motorway_link","trunk_link","primary_link","secondary_link","tertiary_link"}; //Apply MainHighwayMaterial //Classified as "Roads" or "Link roads" in osm
+        public List<string> SubHighwayValues = new List<string>(){"living_street","service","pedestrian","track","bus_guideway","escape","raceway","road"}; //Apply MainHighwayMaterial //Classified as "Special road types" in osm
+        public List<string> PathHighwayValues = new List<string>(){"footway","bridleway","steps","corridor","path","cycleway"}; //Apply PathHighwayMaterial //Classified as "Paths" or "When cycleway is drawn as its own way" in osm //remaining: "Lifecycle" etc
+    }
+    RoadClassification roadClassification=new RoadClassification();
+
+   
+
 
     public IEnumerator Make(MapReader map, MapSettings set, GameObject parentObj)
     {
@@ -19,7 +44,7 @@ class RoadMaker : MonoBehaviour
             yield return null;
         }*/
 
-        foreach (var way in map.mapData.ways.FindAll((w) => { return w.IsRoad; }))
+        foreach (var way in map.mapData.ways.FindAll((w) => { return w.Highway != ""; }))//foreach in way where way.Highway!="", This means some kind of Highway
         {   
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(map,way);
@@ -28,8 +53,18 @@ class RoadMaker : MonoBehaviour
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
-
-            mr.material = roadMaterial;
+            
+            //classfy highway and assgin each material
+            if(roadClassification.MainHighwayValues.Contains(way.Highway)){
+                mr.material = roadMaterial.MainHighway;
+            }else if(roadClassification.SubHighwayValues.Contains(way.Highway)){
+                mr.material = roadMaterial.SubHighway;
+            }else if(roadClassification.PathHighwayValues.Contains(way.Highway)){
+                mr.material = roadMaterial.PathHighway;
+            }else{
+                mr.material = roadMaterial.ElseHighway;
+            }
+            
 
             List<Vector3> vectors = new List<Vector3>();
             List<Vector3> normals = new List<Vector3>();
