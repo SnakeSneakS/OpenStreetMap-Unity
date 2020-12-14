@@ -36,7 +36,14 @@ class RoadMaker : MonoBehaviour
             List<Vector2> uvs = new List<Vector2>();
             List<int> indices = new List<int>();
 
-            for (int i = 1; i < way.NodeIDs.Count; i++)
+            bool isFirstRoadVector=true;
+            Vector3 v1_old=Vector3.zero;
+            Vector3 v2_old=Vector3.zero;
+            Vector3 v3_old=Vector3.zero;
+            Vector3 v4_old=Vector3.zero; 
+
+            int wayCount=way.NodeIDs.Count;
+            for (int i = 1; i < wayCount; i++)
             {
                 OSMnode p1 = map.mapData.nodes[way.NodeIDs[i - 1]];
                 OSMnode p2 = map.mapData.nodes[way.NodeIDs[i]];
@@ -49,56 +56,110 @@ class RoadMaker : MonoBehaviour
                 s2.x*=set.mag_h; s2.z*=set.mag_h;
                 
                 Vector3 diff = (s2 - s1).normalized;
-                var cross = Vector3.Cross(diff, Vector3.up) * set.road_w; // 0.05 meters - width of lane
+                var cross = Vector3.Cross(diff, Vector3.up) * set.road_w; // width of road
 
-                Vector3 v1 = s1 + cross;
-                Vector3 v2 = s1 - cross;
-                Vector3 v3 = s2 + cross;
-                Vector3 v4 = s2 - cross;
+                /*
+                Shape: 
 
-                vectors.Add(v1);
-                vectors.Add(v2);
-                vectors.Add(v3);
-                vectors.Add(v4);
+                    //normal squad(v1, v2, v3, v4)
+                    v3  v4
 
+                    v1  v2
+
+                    //here squad(v1_old, v2_old, v3_old, v4_old), v1(v2) is calculated as (v1(v2) + v3_old)/2
+                    (v3)    (v4)
+                    v1      v2
+                    v1_old  v2_old
+                    
+                */
+
+                /*
+
+                    Here: Don't show back side of road.
+
+                */
+
+                Vector3 v1 = s1 - cross;
+                Vector3 v2 = s1 + cross;
+                Vector3 v3 = s2 - cross;
+                Vector3 v4 = s2 + cross;
+
+                if(isFirstRoadVector){//just set v?_old (? is between 1 and 4) first
+                    isFirstRoadVector=false;
+                    v1_old=v1;
+                    v2_old=v2;
+                    v3_old=v3;
+                    v4_old=v4;
+                    vectors.Add(v1); vectors.Add(v2);
+                    normals.Add(-Vector3.up); normals.Add(-Vector3.up);
+                    uvs.Add(new Vector2(0,0)); uvs.Add(new Vector2(1,0));
+                    continue;
+                }else{
+                    v1=(v1+v3_old)/2;
+                    v2=(v2+v4_old)/2;
+                }
+
+                //precise vectors are "v1_old. v2_old, v1, v4". So add them
+                /*vectors.Add(v1_old); vectors.Add(v2_old);*/ vectors.Add(v1); vectors.Add(v2);
+
+                if(i%2==0){
+                    uvs.Add(new Vector2(0,1));
+                    uvs.Add(new Vector2(1,1));
+                }else{
+                    uvs.Add(new Vector2(0,0));
+                    uvs.Add(new Vector2(1,0));
+                }
+                /*
                 uvs.Add(new Vector2(0,0));
                 uvs.Add(new Vector2(1,0));
                 uvs.Add(new Vector3(0,1));
                 uvs.Add(new Vector3(1,1));
+                */
 
                 normals.Add(-Vector3.up);
                 normals.Add(-Vector3.up);
-                normals.Add(-Vector3.up);
-                normals.Add(-Vector3.up);
-                
-                // index values
-                int idx1, idx2,idx3, idx4;
+                /*normals.Add(-Vector3.up);
+                normals.Add(-Vector3.up);*/
+                 
+                int idx1, idx2,idx3, idx4; // index values
                 int count=vectors.Count;
-                idx4 = count - 1;
-                idx3 = count - 2;
-                idx2 = count - 3;
-                idx1 = count - 4;
+                idx4 = count - 1; //v2
+                idx3 = count - 2; //v1
+                idx2 = count - 3; //v2_old
+                idx1 = count - 4; //v1_old
 
-                // first triangle v1, v3, v2 //one side
-                indices.Add(idx1);
-                indices.Add(idx3);
-                indices.Add(idx2);
+               
+                indices.Add(idx1); indices.Add(idx2); indices.Add(idx3);  // first triangle v1, v3, v2 //one side
+                indices.Add(idx3); indices.Add(idx2); indices.Add(idx4); // second triangle v3, v4, v2 //one side
+                /*indices.Add(idx1); indices.Add(idx3); indices.Add(idx2); // third triangle v2, v3, v1 //the other side 
+                indices.Add(idx3); indices.Add(idx2); indices.Add(idx4); // fourth triangle v2, v4, v3 //the other side*/
+                
+                if(i==wayCount-1){//if last: add last triangle v1, v2, v3, v4
+                    /*vectors.Add(v1_old); vectors.Add(v2_old);*/ vectors.Add(v1); vectors.Add(v2);
 
-                // second triangle v3, v4, v2 //one side
-                indices.Add(idx3);
-                indices.Add(idx4);
-                indices.Add(idx2);
+                    uvs.Add(new Vector2(0,1)); uvs.Add(new Vector2(1,1)); /*uvs.Add(new Vector3(0,1)); uvs.Add(new Vector3(1,1));*/
 
-                // third triangle v2, v3, v1 //the other side
-                indices.Add(idx2);
-                indices.Add(idx3);
-                indices.Add(idx1);
+                    normals.Add(-Vector3.up); normals.Add(-Vector3.up); /*normals.Add(-Vector3.up); normals.Add(-Vector3.up);*/
 
-                // fourth triangle v2, v4, v3 //the other side
-                indices.Add(idx2);
-                indices.Add(idx4);
-                indices.Add(idx3);
+                    count=vectors.Count;
+                    idx4 = count - 1; //v2
+                    idx3 = count - 2; //v1
+                    idx2 = count - 3; //v2_old
+                    idx1 = count - 4; //v1_old
+
+                    indices.Add(idx1); indices.Add(idx2); indices.Add(idx3);  // first triangle v1, v3, v2 //one side
+                    indices.Add(idx3); indices.Add(idx2); indices.Add(idx4); // second triangle v3, v4, v2 //one side
+                    /*indices.Add(idx1); indices.Add(idx3); indices.Add(idx2); // third triangle v2, v3, v1 //the other side 
+                    indices.Add(idx3); indices.Add(idx2); indices.Add(idx4); // fourth triangle v2, v4, v3 //the other side*/
+                }
+
+
+                //ready for next triangles
+                v1_old=v1; v2_old=v2; v3_old=v3; v4_old=v4;
+
+                
             }
+
 
             mf.mesh.vertices = vectors.ToArray();
             mf.mesh.normals = normals.ToArray();
