@@ -10,6 +10,15 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+
+
+#ignore .osm files except "MapName.osm"
+/[Aa]ssets/OSM/Data/*.osm
+/[Aa]ssets/OSM/Data/*.osm.meta
+!/[Aa]ssets/OSM/Data/MapName.osm
+!/[Aa]ssets/OSM/Data/MapName.osm.meta
+
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
