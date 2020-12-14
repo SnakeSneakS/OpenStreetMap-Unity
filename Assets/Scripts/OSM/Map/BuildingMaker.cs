@@ -17,7 +17,6 @@ public class BuildingMaker : MonoBehaviour
 
         GameObject buildingObj = new GameObject();
         buildingObj.transform.parent=parentObj.transform;
-        buildingObj.transform.position=buildingPos;
         buildingObj.name="Buildings";
 
         foreach (var way in map.mapData.ways.FindAll((w) => { return w.IsBuilding && w.NodeIDs.Count > 1; }))
@@ -26,6 +25,7 @@ public class BuildingMaker : MonoBehaviour
             Vector3 localOrigin = GetCentre(map,way);
             Vector3 TransformPos=localOrigin - map.mapData.bounds.Centre;
             go.transform.parent=buildingObj.transform;
+            go.name=way.Name;
 
             //magnitude horizontal 
             TransformPos.x*=set.mag_h; TransformPos.z*=set.mag_h;
@@ -117,6 +117,8 @@ public class BuildingMaker : MonoBehaviour
 
             yield return null;
         }
+
+        buildingObj.transform.position=buildingPos;
 
     }
 

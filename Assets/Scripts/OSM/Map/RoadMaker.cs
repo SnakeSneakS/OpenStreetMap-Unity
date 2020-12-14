@@ -41,7 +41,6 @@ class RoadMaker : MonoBehaviour
 
         GameObject roadObj = new GameObject();
         roadObj.transform.parent=parentObj.transform;
-        roadObj.transform.position=roadPos;
         roadObj.name="Roads";
 
         foreach (var way in map.mapData.ways.FindAll((w) => { return w.Highway != ""; }))//foreach in way where way.Highway!="", This means some kind of Highway
@@ -50,6 +49,7 @@ class RoadMaker : MonoBehaviour
             Vector3 localOrigin = GetCentre(map,way);
             go.transform.position = (localOrigin - map.mapData.bounds.Centre)*set.mag_h;//magnitude
             go.transform.parent=roadObj.transform;
+            go.name=way.Name;
 
             MeshFilter mf = go.AddComponent<MeshFilter>();
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
@@ -203,6 +203,8 @@ class RoadMaker : MonoBehaviour
 
             yield return null;
         }
+
+        roadObj.transform.position=roadPos;
 
     }
 

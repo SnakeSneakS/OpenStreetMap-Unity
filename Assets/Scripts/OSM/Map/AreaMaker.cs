@@ -37,15 +37,15 @@ public class AreaMaker : MonoBehaviour
         
         GameObject areaObj = new GameObject();
         areaObj.transform.parent=parentObj.transform;
-        areaObj.transform.position=areaPos;
         areaObj.name="Areas";
 
-        foreach (var way in map.mapData.ways.FindAll((w) => { return w.Leisure!="" && w.NodeIDs.Count > 1; }))
+        foreach (var way in map.mapData.ways.FindAll((w) => { return w.Leisure!=null && w.NodeIDs.Count > 1; }))
         {
             GameObject go = new GameObject();
             Vector3 localOrigin = GetCentre(map,way);
             Vector3 TransformPos=localOrigin - map.mapData.bounds.Centre;
             go.transform.parent=areaObj.transform;
+            go.name=way.Name;
 
             //magnitude horizontal 
             TransformPos.x*=set.mag_h; TransformPos.z*=set.mag_h;
@@ -110,6 +110,8 @@ public class AreaMaker : MonoBehaviour
 
             yield return null;
         }
+
+        areaObj.transform.position=areaPos;
 
     }
 

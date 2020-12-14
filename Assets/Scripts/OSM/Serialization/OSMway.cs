@@ -14,6 +14,7 @@ public class OSMway: OSM_Func
     public float Height {get; private set; }
     public string Leisure{get;private set;}
     public string Nature{get;private set;}
+    public string Name{get; private set;}
 
 
     public OSMway(XmlNode node)
@@ -49,6 +50,10 @@ public class OSMway: OSM_Func
             ** service roads
             */
             string key = GetAttribute<string>("k", t.Attributes);
+            if(key=="name"){
+                Name = GetAttribute<string>("v", t.Attributes);
+            }
+
             if (key == "height")
             {
                 Height = GetAttribute<float>("v", t.Attributes);
