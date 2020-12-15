@@ -2,6 +2,7 @@
 I tried to create 3d town with using [OpenStreetMap](https://wiki.openstreetmap.org/wiki/Main_Page)
 
 ![one image](8F5308E0-978E-42EE-BF78-81F121E8EFD1_1_201_a.jpeg)
+![another image](4E73427C-9B97-4AF6-87D6-A1392351DA3B.jpeg)
 
 
 # How:
